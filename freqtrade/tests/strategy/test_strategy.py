@@ -21,7 +21,6 @@ def test_search_strategy():
 
 
 def test_strategy_structure():
-    assert hasattr(Strategy, 'init')
     assert hasattr(Strategy, 'populate_indicators')
     assert hasattr(Strategy, 'populate_buy_trend')
     assert hasattr(Strategy, 'populate_sell_trend')
@@ -41,8 +40,7 @@ def test_load_strategy(result):
 
 
 def test_strategy(result):
-    strategy = Strategy()
-    strategy.init({'strategy': 'default_strategy'})
+    strategy = Strategy({'strategy': 'default_strategy'})
 
     assert hasattr(strategy.custom_strategy, 'minimal_roi')
     assert strategy.minimal_roi['0'] == 0.04
@@ -70,8 +68,7 @@ def test_strategy_override_minimal_roi(caplog):
             "0": 0.5
         }
     }
-    strategy = Strategy()
-    strategy.init(config)
+    strategy = Strategy(config)
 
     assert hasattr(strategy.custom_strategy, 'minimal_roi')
     assert strategy.minimal_roi['0'] == 0.5
@@ -87,8 +84,7 @@ def test_strategy_override_stoploss(caplog):
         'strategy': 'default_strategy',
         'stoploss': -0.5
     }
-    strategy = Strategy()
-    strategy.init(config)
+    strategy = Strategy(config)
 
     assert hasattr(strategy.custom_strategy, 'stoploss')
     assert strategy.stoploss == -0.5
@@ -105,8 +101,7 @@ def test_strategy_override_ticker_interval(caplog):
         'strategy': 'default_strategy',
         'ticker_interval': 60
     }
-    strategy = Strategy()
-    strategy.init(config)
+    strategy = Strategy(config)
 
     assert hasattr(strategy.custom_strategy, 'ticker_interval')
     assert strategy.ticker_interval == 60
@@ -126,8 +121,7 @@ def test_strategy_fallback_default_strategy():
 
 
 def test_strategy_singleton():
-    strategy1 = Strategy()
-    strategy1.init({'strategy': 'default_strategy'})
+    strategy1 = Strategy({'strategy': 'default_strategy'})
 
     assert hasattr(strategy1.custom_strategy, 'minimal_roi')
     assert strategy1.minimal_roi['0'] == 0.04
