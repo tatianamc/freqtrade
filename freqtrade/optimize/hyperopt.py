@@ -25,7 +25,7 @@ import freqtrade.vendor.qtpylib.indicators as qtpylib
 from freqtrade.configuration import Configuration
 from freqtrade.optimize import load_data
 from freqtrade.arguments import Arguments
-from freqtrade.optimize.backtesting import Backtesting, setup_configuration
+from freqtrade.optimize.backtesting import Backtesting
 from freqtrade.logger import Logger
 from user_data.hyperopt_conf import hyperopt_optimize_conf
 
@@ -353,6 +353,9 @@ class Hyperopt(Backtesting):
         Define the buy strategy parameters to be used by hyperopt
         """
         def populate_buy_trend(dataframe: DataFrame) -> DataFrame:
+            """
+            Buy strategy Hyperopt will build and use
+            """
             conditions = []
             # GUARDS AND TRENDS
             if 'uptrend_long_ema' in params and params['uptrend_long_ema']['enabled']:

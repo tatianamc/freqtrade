@@ -1,14 +1,16 @@
+# pragma pylint: disable=unused-argument, unused-variable, protected-access, invalid-name
+
 """
 This module manage Telegram communication
 """
 
 from typing import Any, Callable
-from freqtrade.rpc.rpc import RPC
 from tabulate import tabulate
 from telegram import Bot, ParseMode, ReplyKeyboardMarkup, Update
 from telegram.error import NetworkError, TelegramError
 from telegram.ext import CommandHandler, Updater
 from freqtrade.__init__ import __version__
+from freqtrade.rpc.rpc import RPC
 
 
 def authorized_only(command_handler: Callable[[Bot, Update], None]) -> Callable[..., Any]:
@@ -17,10 +19,10 @@ def authorized_only(command_handler: Callable[[Bot, Update], None]) -> Callable[
     :param command_handler: Telegram CommandHandler
     :return: decorated function
     """
-
-    #def wrapper(self, bot: Bot, update: Update):
     def wrapper(self, *args, **kwargs):
-
+        """
+        Decorator logic
+        """
         update = kwargs.get('update') or args[1]
 
         # Reject unauthorized messages
@@ -294,7 +296,6 @@ class Telegram(RPC):
         (error, msg) = self.rpc_stop()
         self.send_msg(msg, bot=bot)
 
-    # FIX: no test for this!!!!
     @authorized_only
     def _forcesell(self, bot: Bot, update: Update) -> None:
         """
@@ -370,10 +371,12 @@ class Telegram(RPC):
                   "*/status [table]:* `Lists all open trades`\n" \
                   "         *table :* `will display trades in a table`\n" \
                   "*/profit:* `Lists cumulative profit from all finished trades`\n" \
-                  "*/forcesell <trade_id>|all:* `Instantly sells the given trade or all trades, regardless of profit`\n" \
+                  "*/forcesell <trade_id>|all:* `Instantly sells the given trade or all trades, " \
+                  "regardless of profit`\n" \
                   "*/performance:* `Show performance of each finished trade grouped by pair`\n" \
                   "*/daily <n>:* `Shows profit or loss per day, over the last n days`\n" \
-                  "*/count:* `Show number of trades running compared to allowed number of trades`\n" \
+                  "*/count:* `Show number of trades running compared to allowed number of trades`" \
+                  "\n" \
                   "*/balance:* `Show account balance per currency`\n" \
                   "*/help:* `This help message`\n" \
                   "*/version:* `Show version`"
@@ -391,7 +394,8 @@ class Telegram(RPC):
         """
         self.send_msg('*Version:* `{}`'.format(__version__), bot=bot)
 
-    def send_msg(self, msg: str, bot: Bot = None, parse_mode: ParseMode = ParseMode.MARKDOWN) -> None:
+    def send_msg(self, msg: str, bot: Bot = None,
+                 parse_mode: ParseMode = ParseMode.MARKDOWN) -> None:
         """
         Send given markdown message
         :param msg: message
